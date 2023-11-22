@@ -9,6 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -27,7 +28,7 @@ public class AppConfig {
                 .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**")
                         .authenticated()
                         .anyRequest().permitAll())
-                .addFilterBefore(null, null)
+                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf((ob) -> ob.disable())
                 .cors((requests) -> requests.configurationSource(new CorsConfigurationSource() {
                     @Override
