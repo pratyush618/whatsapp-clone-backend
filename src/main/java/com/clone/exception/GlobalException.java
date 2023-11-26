@@ -10,6 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @RestControllerAdvice
 @SuppressWarnings("unused")
@@ -18,19 +19,26 @@ public class GlobalException {
     @ExceptionHandler(UserException.class)
     public ResponseEntity<ErrorDetail> userExceptionHandler(UserException e, WebRequest request) {
         ErrorDetail err = new ErrorDetail(e.getMessage(), request.getDescription(false), LocalDateTime.now());
-        return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MessageException.class)
-    public ResponseEntity<ErrorDetail> MessageExceptionHandler(MessageException e, WebRequest request) {
+    public ResponseEntity<ErrorDetail> messageExceptionHandler(MessageException e, WebRequest request) {
         ErrorDetail err = new ErrorDetail(e.getMessage(), request.getDescription(false), LocalDateTime.now());
-        return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorDetail> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e, WebRequest request) {
+    public ResponseEntity<ErrorDetail> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e, WebRequest request) {
+        String error = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
+        ErrorDetail err = new ErrorDetail("Validation error.", error, LocalDateTime.now());
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ChatException.class)
+    public ResponseEntity<ErrorDetail> chatException(ChatException e, WebRequest request) {
         ErrorDetail err = new ErrorDetail(e.getMessage(), request.getDescription(false), LocalDateTime.now());
-        return new ResponseEntity<ErrorDetail>(err, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
