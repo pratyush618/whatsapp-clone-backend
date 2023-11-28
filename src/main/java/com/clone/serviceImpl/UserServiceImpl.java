@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -45,7 +46,6 @@ public class UserServiceImpl implements UserService {
         }
 
         throw new UserException("User not found with id: " + userId);
-        return null;
     }
 
     @Override

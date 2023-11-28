@@ -6,15 +6,15 @@ import com.clone.request.UpdateUserRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@SuppressWarnings("unused")
 public interface UserService {
 
-    Optional<User> findByEmail(String email) throws UserException;
+    User findByEmail(String email) throws UserException;
     User findUserProfile(String jwt);
     User updateUser(Integer userId, UpdateUserRequest request) throws UserException;
-    Optional<User> findUserById(Integer userId) throws UserException;
+    User findUserById(Integer userId) throws UserException;
     List<User> searchUser(String query);
 
 }
