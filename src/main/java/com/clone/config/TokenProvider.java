@@ -15,7 +15,7 @@ public class TokenProvider {
 
     SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
 
-    String generateToken(Authentication authentication) {
+    public String generateToken(Authentication authentication) {
         return String.valueOf(Jwts.builder()
                 .setIssuer("Cloner")
                 .setIssuedAt(new Date())
@@ -25,7 +25,7 @@ public class TokenProvider {
                 .compact());
     }
 
-    String getEmailFromToken(String token) {
+    public String getEmailFromToken(String token) {
         token = token.substring(7);
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 
