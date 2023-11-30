@@ -12,7 +12,7 @@ import java.util.List;
 public interface UserService {
 
     User findByEmail(String email) throws UserException;
-    User findUserProfile(String jwt);
+    User findUserProfile(String jwt) throws UserException;
     User updateUser(Integer userId, UpdateUserRequest request) throws UserException;
     User findUserById(Integer userId) throws UserException;
     List<User> searchUser(String query);
