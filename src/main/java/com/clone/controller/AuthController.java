@@ -25,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
+@SuppressWarnings("unused")
 public class AuthController {
 
     private final UserRepository userRepository;
@@ -70,7 +71,7 @@ public class AuthController {
 
         AuthResponse authResponse = new AuthResponse(token,true);
 
-        return new ResponseEntity<>(authResponse, HttpStatus.OK);
+        return new ResponseEntity<>(authResponse, HttpStatus.ACCEPTED);
 
     }
 
@@ -103,7 +104,7 @@ public class AuthController {
         }
 
         if(!passwordEncoder.matches(password, userDetails.getPassword())) {
-            System.out.println("Signing In: [WRONG PASSWORD]" + userDetails);
+            System.out.println("Sign In Failed: [WRONG PASSWORD]" + userDetails);
             throw new BadCredentialsException("Invalid username or password");
         }
 
