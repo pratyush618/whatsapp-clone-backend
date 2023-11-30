@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Integer userId, UpdateUserRequest request) throws UserException {
+    public void updateUser(Integer userId, UpdateUserRequest request) throws UserException {
         Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()) {
             User u = user.get();
@@ -62,7 +62,8 @@ public class UserServiceImpl implements UserService {
             if(request.getProfile_picture() != null) {
                 request.setProfile_picture(u.getProfile_picture());
             }
-            return userRepository.save(u);
+            userRepository.save(u);
+            return;
         }
         throw new UserException("User not found with userId: " + userId);
     }
