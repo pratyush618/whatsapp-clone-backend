@@ -69,6 +69,7 @@ public class ChatServiceImpl implements ChatService {
         group.setChat_name(request.getChat_name());
         group.setChat_image(request.getChat_image());
         group.setCreatedBy(reqUser);
+        group.getAdmins().add(reqUser);
 
         for(Integer userId : request.getUserIds()) {
             User user = userService.findUserById(userId);
@@ -80,7 +81,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException {
+    public Chat addUserToGroup(Integer userId, Integer chatId, User reqUser) throws UserException, ChatException {
 
         Optional<Chat> chat = chatRepository.findById(chatId);
         User user = userService.findUserById(userId);
@@ -88,24 +89,67 @@ public class ChatServiceImpl implements ChatService {
             throw new ChatException("Chat not found with ID: " + chatId);
         }
 
-        chat.get().getUsers().add(user);
-        return chat.get();
+        if(chat.get().getAdmins().contains(reqUser)) {
+            chatRepository.save(chat.get());
+            return chat.get();
+        } else {
+            throw new UserException("User: NOT ADMIN : OPERATION DENIED");
+        }
 
     }
 
     @Override
-    public Chat renameGroup(Integer chatId, String groupName, Integer reqUserId) throws UserException, ChatException {
-        return null;
+    public Chat renameGroup(Integer chatId, String groupName, User reqUser) throws UserException, ChatException {
+        Optional<Chat> chat = chatRepository.findById(chatId);
+        if(chat.isEmpty()) {
+            throw new ChatException("Chat (" + chatId + "): NOT FOUND");
+        }
+        if(chat.get().getAdmins().contains(reqUser)) {
+            chat.get().setChat_name(groupName);
+            chatRepository.save(chat.get());
+            return chat.get();
+        }
+
+        throw new UserException("User: NOT ADMIN : OPERATION DENIED");
     }
 
     @Override
-    public Chat removeFromGroup(Integer chatId, Integer userId, Integer reqUser) throws UserException, ChatException {
-        return null;
+    public Chat removeFromGroup(Integer chatId, Integer userId, User reqUser) throws UserException, ChatException {
+
+        Optional<Chat> chat = chatRepository.findById(chatId);
+        if(chat.isEmpty()) {
+            throw new ChatException("Chat (" + chatId + "): NOT FOUND");
+        }
+
+        if(chat.get().getAdmins().contains(reqUser)) {
+            Optional<User> user = Optional.ofNullable(userService.findUserById(userId));
+            if(user.isEmpty()) {
+                throw new UserException("User: NOT FOUND IN THE GROUP : OPERATION FAILED");
+            }
+            chat.get().getUsers().remove(user.get());
+            chatRepository.save(chat.get());
+        }
+        throw new UserException("User: NOT ADMIN : OPERATION DENIED");
+
     }
 
     @Override
     public Chat deleteChat(Integer chatId, Integer userId) throws ChatException, UserException {
-        return null;
+
+        Optional<Chat> chat = chatRepository.findById(chatId);
+        if(chat.isEmpty()) {
+            throw new ChatException("Chat (" + chatId + "): NOT FOUND");
+        }
+
+        Optional<User> user = Optional.ofNullable(userService.findUserById(userId));
+        if(user.isEmpty()) {
+            throw new UserException("User: NOT FOUND IN THE GROUP : OPERATION FAILED");
+        }
+        chat.get().getUsers().remove(user.get());
+        chatRepository.save(chat.get());
+
+        return chat.get();
+
     }
 
 }

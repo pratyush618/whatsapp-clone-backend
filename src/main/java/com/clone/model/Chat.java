@@ -18,6 +18,9 @@ public class Chat {
     private String chat_name;
     private String chat_image;
 
+    @ManyToMany
+    private Set<User> admins;
+
     @Column(name = "is_group")
     private Boolean isGroup;
 
