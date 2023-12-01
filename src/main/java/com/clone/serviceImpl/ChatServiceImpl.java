@@ -134,7 +134,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Chat deleteChat(Integer chatId, Integer userId) throws ChatException, UserException {
+    public void deleteChat(Integer chatId, Integer userId) throws ChatException, UserException {
 
         Optional<Chat> chat = chatRepository.findById(chatId);
         if(chat.isEmpty()) {
@@ -145,10 +145,7 @@ public class ChatServiceImpl implements ChatService {
         if(user.isEmpty()) {
             throw new UserException("User: NOT FOUND IN THE GROUP : OPERATION FAILED");
         }
-        chat.get().getUsers().remove(user.get());
-        chatRepository.save(chat.get());
-
-        return chat.get();
+        chatRepository.deleteById(chat.get().getId());
 
     }
 
