@@ -11,6 +11,7 @@ import com.clone.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -39,28 +40,56 @@ public class ChatServiceImpl implements ChatService {
         chat.getUsers().add(user);
         chat.setIsGroup(false);
 
-        return null;
+        return chat;
 
     }
 
     @Override
     public Chat findById(Integer chatId) throws ChatException {
-        return null;
+
+        Optional<Chat> chat = chatRepository.findById(chatId);
+        if(chat.isEmpty()) {
+            throw new ChatException("Chat not found with ID: " + chatId);
+        }
+        return chat.get();
+
     }
 
     @Override
-    public List<Chat> findAllChatByUserId(Integer id) throws UserException {
-        return null;
+    public List<Chat> findAllChatByUserId(Integer userId) throws UserException {
+        User user = userService.findUserById(userId);
+        return chatRepository.findChatByUserId(user.getId());
     }
 
     @Override
-    public Chat createGroup(GroupChatRequest request, Integer reqUserId) throws UserException {
-        return null;
+    public Chat createGroup(GroupChatRequest request, User reqUser) throws UserException {
+
+        Chat group = new Chat();
+        group.setIsGroup(true);
+        group.setChat_name(request.getChat_name());
+        group.setChat_image(request.getChat_image());
+        group.setCreatedBy(reqUser);
+
+        for(Integer userId : request.getUserIds()) {
+            User user = userService.findUserById(userId);
+            group.getUsers().add(user);
+        }
+
+        return group;
+
     }
 
     @Override
     public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException {
-        return null;
+
+        Optional<Chat> chat = chatRepository.findById(chatId);
+        if(chat.isEmpty()) {
+            throw new ChatException("Chat not found with ID: " + chatId);
+        }
+
+        User user = userService.findUserById(userId);
+
+
     }
 
     @Override
