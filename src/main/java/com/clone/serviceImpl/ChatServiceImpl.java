@@ -83,12 +83,13 @@ public class ChatServiceImpl implements ChatService {
     public Chat addUserToGroup(Integer userId, Integer chatId) throws UserException, ChatException {
 
         Optional<Chat> chat = chatRepository.findById(chatId);
+        User user = userService.findUserById(userId);
         if(chat.isEmpty()) {
             throw new ChatException("Chat not found with ID: " + chatId);
         }
 
-        User user = userService.findUserById(userId);
-
+        chat.get().getUsers().add(user);
+        return chat.get();
 
     }
 
