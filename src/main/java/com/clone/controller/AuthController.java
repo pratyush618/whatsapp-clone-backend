@@ -6,7 +6,7 @@ import com.clone.model.User;
 import com.clone.repository.UserRepository;
 import com.clone.request.LoginRequest;
 import com.clone.response.AuthResponse;
-import com.clone.service.CustomUserDetailsService;
+import com.clone.serviceImpl.CustomUserDetailsServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +31,10 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
-    private final CustomUserDetailsService customUserDetails;
+    private final CustomUserDetailsServiceImpl customUserDetails;
 
     public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                          TokenProvider tokenProvider, CustomUserDetailsService customUserDetails) {
+                          TokenProvider tokenProvider, CustomUserDetailsServiceImpl customUserDetails) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;

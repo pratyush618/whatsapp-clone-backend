@@ -11,7 +11,7 @@ import java.util.List;
 public interface ChatService {
 
     Chat createChat(User reqUser, Integer sender) throws UserException;
-    Chat findById(Integer chatId) throws ChatException;
+    Chat findChatById(Integer chatId) throws ChatException;
     List<Chat> findAllChatByUserId(Integer userId) throws UserException;
     Chat createGroup(GroupChatRequest request, User reqUser) throws UserException;
     Chat addUserToGroup(Integer userId, Integer chatId, User reqUser) throws UserException, ChatException;

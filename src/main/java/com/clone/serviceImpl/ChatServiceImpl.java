@@ -45,7 +45,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Chat findById(Integer chatId) throws ChatException {
+    public Chat findChatById(Integer chatId) throws ChatException {
 
         Optional<Chat> chat = chatRepository.findById(chatId);
         if(chat.isEmpty()) {
