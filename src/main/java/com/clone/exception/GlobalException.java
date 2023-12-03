@@ -47,6 +47,12 @@ public class GlobalException {
         return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(StatusException.class)
+    public ResponseEntity<ErrorDetail> noStatusFoundException(StatusException se, WebRequest request) {
+        ErrorDetail err = new ErrorDetail("Status: ERROR: ", se.getMessage(), LocalDateTime.now());
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetail> otherErrorHandler(Exception e, WebRequest request) {
         ErrorDetail err = new ErrorDetail(e.getMessage(), request.getDescription(false), LocalDateTime.now());
