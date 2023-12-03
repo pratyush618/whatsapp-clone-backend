@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@SuppressWarnings("unused")
 public class UserServiceImpl implements UserService {
 
     @Autowired

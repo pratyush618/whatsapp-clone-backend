@@ -7,14 +7,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@SuppressWarnings("unused")
 public interface UserService {
 
     User findByEmail(String email) throws UserException;
+
     User findUserProfile(String jwt) throws UserException;
+
     void updateUser(Integer userId, UpdateUserRequest request) throws UserException;
+
     User findUserById(Integer userId) throws UserException;
+
     List<User> searchUser(String query);
 
 }

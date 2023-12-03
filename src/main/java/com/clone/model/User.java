@@ -9,8 +9,8 @@ import lombok.EqualsAndHashCode;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -21,6 +21,8 @@ public class User {
     private Integer id;
 
     private String full_name;
+
+    @Column(unique = true)
     private String email;
     private String profile_picture;
     private String password;
