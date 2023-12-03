@@ -29,7 +29,8 @@ public class MessageController {
 
     @PostMapping("/create")
     public ResponseEntity<Message> sendMessageHandler(@RequestBody SendMessageRequest request,
-                                                      @RequestHeader("Authorization") String jwt) throws ChatException, UserException {
+                                                      @RequestHeader("Authorization") String jwt)
+            throws ChatException, UserException {
 
         User user = userService.findUserProfile(jwt);
         request.setUserId(user.getId());
@@ -41,7 +42,8 @@ public class MessageController {
 
     @GetMapping("/chat/{chatId}")
     public ResponseEntity<List<Message>> getChatsMessagesHandler(@PathVariable("chatId") Integer chatId,
-                                                        @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
+                                                                 @RequestHeader("Authorization") String jwt)
+            throws UserException, ChatException {
 
         User user = userService.findUserProfile(jwt);
         List<Message> messages = messageService.getChatsMessages(chatId, user);
@@ -53,7 +55,7 @@ public class MessageController {
     @DeleteMapping("/delete/{messageId}")
     public ResponseEntity<ApiResponse> deleteMessageHandler(@PathVariable("messageId") Integer messageId,
                                                             @RequestHeader("Authorization") String jwt)
-            throws UserException, ChatException, MessageException {
+            throws UserException, MessageException {
 
         User user = userService.findUserProfile(jwt);
         messageService.deleteMessage(messageId, user);

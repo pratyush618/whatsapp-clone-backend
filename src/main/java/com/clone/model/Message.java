@@ -14,6 +14,7 @@ public class Message {
     private Integer id;
     private String content;
 
+    @Column(name = "local_date_time")
     private LocalDateTime localDateTime;
 
     @ManyToOne
