@@ -5,6 +5,7 @@ import com.clone.exception.UserException;
 import com.clone.model.Chat;
 import com.clone.model.User;
 import com.clone.request.GroupChatRequest;
+import com.clone.request.RenameGroupRequest;
 import com.clone.request.SingleChatRequest;
 import com.clone.response.ApiResponse;
 import com.clone.service.ChatService;
@@ -69,8 +70,9 @@ public class ChatController {
 
     @PutMapping("/{chatId}/add/{userId}")
     public ResponseEntity<Chat> addUserToGroupHandler(@PathVariable Integer chatId,
-                                                          @PathVariable Integer userId,
-                                                          @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
+                                                      @PathVariable Integer userId,
+                                                      @RequestHeader("Authorization") String jwt)
+            throws UserException, ChatException {
 
         User user = userService.findUserProfile(jwt);
         Chat chat = chatService.addUserToGroup(userId, chatId, user);
@@ -81,8 +83,9 @@ public class ChatController {
 
     @PutMapping("/{chatId}/remove/{userId}")
     public ResponseEntity<Chat> removeUserFromGroupHandler(@PathVariable Integer chatId,
-                                                      @PathVariable Integer userId,
-                                                      @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
+                                                            @PathVariable Integer userId,
+                                                            @RequestHeader("Authorization") String jwt)
+            throws UserException, ChatException {
 
         User user = userService.findUserProfile(jwt);
         Chat chat = chatService.removeFromGroup(chatId, userId, user);
@@ -93,13 +96,26 @@ public class ChatController {
 
     @DeleteMapping("/delete/{chatId}")
     public ResponseEntity<ApiResponse> deleteChatHandler(@PathVariable Integer chatId,
-                                                                  @RequestHeader("Authorization") String jwt) throws UserException, ChatException {
+                                                         @RequestHeader("Authorization") String jwt)
+            throws UserException, ChatException {
 
         User user = userService.findUserProfile(jwt);
         chatService.deleteChat(chatId, user.getId());
         ApiResponse response = new ApiResponse("Chat: DELETED SUCCESSFULLY", true);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @PostMapping("/rename")
+    public ResponseEntity<Chat> renameGroupHandler(@RequestBody RenameGroupRequest request,
+                                                   @RequestHeader("Authorization") String jwt)
+            throws UserException, ChatException {
+
+        User user = userService.findUserProfile(jwt);
+        Chat chat = chatService.renameGroup(request.getChatId(), request.getGroupName(), user);
+
+        return new ResponseEntity<>(chat, HttpStatus.ACCEPTED);
 
     }
 

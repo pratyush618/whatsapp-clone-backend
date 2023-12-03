@@ -18,20 +18,31 @@ public class Chat {
     private String chat_name;
     private String chat_image;
 
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User createdBy;
+
     @ManyToMany
-    private Set<User> admins;
+    @JoinTable(
+            name = "chat_admins",
+            joinColumns = @JoinColumn(name = "chat_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
 
     @Column(name = "is_group")
     private Boolean isGroup;
 
-    @Column(name = "created_by")
-    @ManyToOne
-    private User createdBy;
+    private Set<User> admins = new HashSet<>();
 
     @ManyToMany
+    @JoinTable(
+            name = "chat_users",
+            joinColumns = @JoinColumn(name = "chat_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<User> users = new HashSet<>();
-
-    @OneToMany(mappedBy = "chat")
-    private List<Message> messages = new ArrayList<>();
 
 }
